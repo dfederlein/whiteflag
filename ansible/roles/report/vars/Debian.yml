@@ -1,0 +1,6 @@
+os_files:
+  - /var/log/syslog
+
+os_commands:
+  apt-get:
+    command: apt-get --version

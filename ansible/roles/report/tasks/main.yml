@@ -1,0 +1,30 @@
+---
+# tasks file for report
+- debug: var=timestamp
+- debug: var=working_dir
+
+- name: create working working dir
+  file: path={{ working_dir }}/files state=directory
+
+- name: dump facts to file
+  copy: content='{{ hostvars[inventory_hostname] | to_nice_json}}' dest="{{ working_dir }}/facts.json"
+
+- include_vars: "{{ ansible_os_family }}.yml"
+
+- name: running common commands
+  shell: "{{ item.value.command }} > {{ working_dir }}/{{ item.key }} "
+  with_dict: common_commands
+
+- name: running os commands
+  shell: "{{ item.value.command }} > {{ working_dir }}/{{ item.key }} "
+  with_dict: os_commands
+  when: os_commands is defined
+
+- name: collecting common files
+  shell: cp --parents -R {{ item }} {{ working_dir }}/files
+  with_items: common_files
+
+- name: collecting {{ ansible_os_family }} files
+  shell: cp --parents -R {{ item }} {{ working_dir }}/files
+  with_items: os_files
+  when: os_files is defined

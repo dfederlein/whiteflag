@@ -1,0 +1,19 @@
+---
+# vars file for report
+timestamp: "{{ ansible_date_time.date }}-{{ ansible_date_time.hour }}-{{ ansible_date_time.minute }}-{{ ansible_date_time.second }}"
+working_dir: /tmp/tower-report-{{ timestamp }}
+
+common_commands:
+  who: 
+    command: who
+  hostname: 
+    command: hostname -f
+  uname: 
+    command: uname -a
+
+common_files:
+  - /var/log/awx
+  - /etc/awx
+
+
+
